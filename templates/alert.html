@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{title}} | 猫猫のBotService</title>
+    <meta name="x5-fullscreen" content="true">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com" as="font">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Noto+Sans+SC:wght@350&family=Quicksand:wght@300..700&display=swap"
+          rel="stylesheet" as="font">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon.ico') }}">
+</head>
+<body>
+<script src="{{ url_for('static', filename='jquery-3.7.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='sweetalert2@9.js') }}"></script>
+<script src="{{ url_for('static', filename='sweetalert.min.js') }}"></script>
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+<script>
+    $(window).on('load', function () {
+        swal({
+            title: "{{alertTitle|safe}}",
+            text: "{{alertText|safe}}",
+            icon: "{{alertIcon}}",
+            buttons: {% if not noButton %}{btn: "{% if reload %}刷新{% elif not buttonText %}返回{% endif %}"}{% else %}false{% endif %},
+            closeOnClickOutside: false,
+        }).then((result) => {
+            {% if href %}window.location.href = "{{href}}"{% elif reload %}location.reload(true){% else %}window.history.go(-1){% endif %};
+        });
+    });
+</script>
+</body>
+</html>

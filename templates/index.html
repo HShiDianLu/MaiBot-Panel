@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>猫猫のBotService</title>
+    <meta name="x5-fullscreen" content="true">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com" as="font">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&family=Noto+Sans+SC:wght@350&family=Quicksand:wght@300..700&display=swap"
+          rel="stylesheet" as="font">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='icon.ico') }}">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" as="style"/>
+</head>
+<body>
+<h1 id="title">猫猫のBotService <small>| Based on <a href="https://github.com/MaiM-with-u/MaiBot"
+                                                     target="_blank">MaiBot</a></small></h1>
+<div id="content">
+    <div id="left">
+        <div class="box">
+            <h3>处理器 <small>/ Processer</small></h3>
+            <p>{{cpu}}</p>
+            <div class="split-line"></div>
+            <p class="detail">核数 <span>{{cpuCore}}</span></p>
+            <p class="detail">主频 <span>{{cpuFreq}} GHz</span></p>
+            <div class="big-num">
+                <div class="line"></div>
+                <span id="cpuUsage">{{cpuUsage}}</span>%<br/><span class="usage">USAGE</span></div>
+        </div>
+        <div class="box">
+            <h3>内存 <small>/ Memory</small></h3>
+            <p>共 {{ramTotal}} GB</p>
+            <div class="split-line"></div>
+            <p class="detail">Swap <span><span id="swapUsed">{{swapUsed}}</span> / {{swapTotal}} GB</span></p>
+            <p class="detail">进程数 <span id="proces">{{proces}}</span></p>
+            <div class="big-num">
+                <div class="line"></div>
+                <span id="ramUsage">{{ramUsage}}</span>%<br/><span class="usage">USAGE</span></div>
+        </div>
+        <div class="box" style="height:160px;">
+            <h3>系统 <small>/ System</small></h3>
+            <p>{{system}}</p>
+            <div class="split-line"></div>
+            <p class="detail">已运行 <span><span id="start">{{start}}</span> 天 <span
+                    id="startHour">{{startHour}}</span> 小时</span>
+            </p>
+            <p class="detail">存储 <span><span id="diskUsed">{{diskUsed}}</span> / {{diskTotal}} GB</span></p>
+        </div>
+    </div>
+    <div id="right-log">
+        <div class="box log-box">
+            <h3>Bot 日志 <small>/ Log</small></h3>
+            <p id="logName" class="desc">{{logName}}</p>
+            <div class="split-line"></div>
+            <div id="log-content">
+                {% for i in log %}
+                <p class="log {{i['level']}}">{{i['timestamp']}} | {{i['logger_name']}}: {{i['event']}}</p>
+                {% endfor %}
+            </div>
+
+            <label class="switch">
+                <input class="checkbox-input" id="scrDown" type="checkbox" checked onclick="switchScroll()">
+                <label class="checkbox" for="scrDown"></label>
+                <span>自动滚动</span>
+            </label>
+
+        </div>
+    </div>
+</div>
+<div id="content2">
+    <div class="box api-box">
+        <h3>服务状态 <small>/ Service Status</small></h3>
+        <p class="desc">MaiBot 相关服务的状态</p>
+        <table>
+            <thead>
+            <tr>
+                <th>服务</th>
+                <th class="short-col">状态</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in serviceList %}
+            <tr>
+                <td>{{i['name']}}</td>
+                <td>
+                    <div class="light {% if i['status'] %}green{% else %}red{% endif %}" id="s-{{i['name']}}"></div>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="box api-box">
+        <h3>API 可用性 <small>/ APIs Status</small></h3>
+        <p class="desc">检查大语言模型的可用性和延迟</p>
+        <table>
+            <thead>
+            <tr>
+                <th>API</th>
+                <th class="short-col">状态</th>
+                <th class="right-col">Ping</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in APIList %}
+            <tr>
+                <td>{{i['name']}}</td>
+                <td>
+                    <div class="light {% if i['status'] %}green{% else %}red{% endif %}" id="api-{{i['name']}}"></div>
+                </td>
+                <td class="right-col" id="p-{{i['name']}}">{{i['ping']}}ms</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<p id="copyright" class="box">BotService (Beta) | Copyright © 2025 HShiDianLu. All Rights Reserved.<br/>
+    <a href="https://github.com/MaiM-with-u/MaiBot" target="_blank">MaiBot Github</a> |
+    <a href="https://hshidianlu.site" target="_blank">主站</a> |
+    <a href="https://bot.hshidianlu.site:1234" target="_blank">Napcat WebUI</a></p>
+<div id="loader-background"></div>
+<div class="loader"></div>
+<script src="{{ url_for('static', filename='jquery-3.7.1.min.js') }}"></script>
+<script src="{{ url_for('static', filename='socket.io.js') }}"></script>
+<script src="{{ url_for('static', filename='main.js') }}"></script>
+<script src="{{ url_for('static', filename='sweetalert2@9.js') }}"></script>
+<script src="{{ url_for('static', filename='sweetalert.min.js') }}"></script>
+</body>
+</html>
